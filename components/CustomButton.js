@@ -1,10 +1,10 @@
-import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { colors } from "../constants/globalThemeConstants";
 
-const CustomButton = () => {
+const CustomButton = ({ text }) => {
   return (
     <TouchableOpacity style={styles.button}>
-      <Text style={styles.buttonText}>Зареєстуватися</Text>
+      <Text style={styles.buttonText}>{text}</Text>
     </TouchableOpacity>
   );
 };
@@ -13,12 +13,12 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
     padding: 16,
-    backgroundColor: "#FF6C00",
+    backgroundColor: colors.orange,
     borderRadius: 100,
     alignItems: "center",
   },
   buttonText: {
-    color: "white",
+    color: colors.white,
     fontSize: 16,
     fontWeight: "bold",
   },

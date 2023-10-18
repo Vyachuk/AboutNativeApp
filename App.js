@@ -1,14 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import SharedLayout from "./components/SharedLayout";
-import RegistrationScreen from "./components/RegistrationScreen";
+import { StyleSheet, View } from "react-native";
+import LoginScreen from "./screens/Auth/LoginScreen";
+import RegistrationScreen from "./screens/Auth/RegistrationScreen";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <SharedLayout>
-        <RegistrationScreen />
-      </SharedLayout>
+      <LoginScreen />
       <StatusBar style="auto" />
     </View>
   );

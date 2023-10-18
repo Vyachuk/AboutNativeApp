@@ -1,10 +1,10 @@
 import { View, ImageBackground, StyleSheet } from "react-native";
 
-export default function RegistrationScreen({ children }) {
+export default function AuthLayout({ children }) {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../assets/background/back_1x.jpg")}
+        source={require("../../../assets/background/back_1x.jpg")}
         resizeMode="cover"
         style={styles.image}
       >
