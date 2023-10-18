@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     left: "50%",
     transform: [{ translateX: -60 }, { translateY: -92 }],
     height: 60,
+    width: 120,
   },
   imageForm: {
     width: 120,
@@ -79,5 +80,12 @@ export const styles = StyleSheet.create({
   showBtnTitle: {
     fontSize: 16,
     color: colors.darkBlue,
+  },
+  iconImageWrap: {
+    borderRadius: "50%",
+    overflow: "hidden",
+    position: "absolute",
+    top: 80,
+    right: -12.5,
   },
 });

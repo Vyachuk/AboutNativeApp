@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AntDesign } from "@expo/vector-icons";
 import {
   View,
   KeyboardAvoidingView,
@@ -11,6 +12,7 @@ import {
 import CustomButton from "../../../components/CustomButton";
 import AuthLayout from "../components/AuthLayout";
 import { styles } from "../styles";
+import { colors } from "../../../constants/globalThemeConstants";
 
 export default function RegistrationScreen() {
   const [isPasswordShow, setIsPasswordShow] = useState(false);
@@ -27,6 +29,20 @@ export default function RegistrationScreen() {
               source={require("../../../assets/woman.png")}
               style={styles.imageForm}
             />
+            <View style={styles.iconImageWrap}>
+              <AntDesign
+                name="closecircleo"
+                size={25}
+                color={colors.gray}
+                backgroundColor={colors.white}
+              />
+              {/* <AntDesign
+                name="pluscircleo"
+                color={colors.orange}
+                size={25}
+                backgroundColor={colors.white}
+              /> */}
+            </View>
           </View>
           <View style={styles.formWrap}>
             <Text style={styles.title}>Реєстрація</Text>

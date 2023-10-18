@@ -6,7 +6,7 @@ import RegistrationScreen from "./screens/Auth/RegistrationScreen";
 export default function App() {
   return (
     <View style={styles.container}>
-      <LoginScreen />
+      <RegistrationScreen />
       <StatusBar style="auto" />
     </View>
   );
