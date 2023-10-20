@@ -36,7 +36,7 @@ const index = () => {
         tabBarShowLabel: false,
         tabBarStyle: {
           position: "absolute",
-          height: 70,
+          minHeight: 70,
         },
         headerTitleAlign: "center",
         headerTitleStyle: {

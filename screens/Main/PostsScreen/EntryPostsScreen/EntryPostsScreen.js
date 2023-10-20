@@ -1,12 +1,19 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 
 const EntryPostsScreen = () => {
   return (
-    <View>
-      <Text>Entry Screen</Text>
+    <View style={styles.container}>
+      <Text>Post Screen</Text>
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignSelf: "center",
+    justifyContent: "center",
+  },
+});
 
 export default EntryPostsScreen;
