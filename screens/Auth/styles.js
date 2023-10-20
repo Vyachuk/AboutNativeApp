@@ -1,11 +1,13 @@
 import { StyleSheet } from "react-native";
-import { colors } from "../../constants/globalThemeConstants";
+import { colors, FontFamily } from "../../constants/globalThemeConstants";
 
 export const styles = StyleSheet.create({
   wrap: {
     flex: 1,
     justifyContent: "flex-end",
+    fontFamily: FontFamily.robotoRegular,
   },
+
   imageFormWrap: {
     position: "relative",
     top: 0,

@@ -15,8 +15,11 @@ import CustomButton from "../../../components/CustomButton";
 import AuthLayout from "../components/AuthLayout";
 import { styles } from "../styles";
 import { colors } from "../../../constants/globalThemeConstants";
+import { useNavigation } from "@react-navigation/native";
 
 export default function RegistrationScreen() {
+  const { navigate } = useNavigation();
+
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [login, setLogin] = useState("");
   const [mail, setMail] = useState("");
@@ -96,7 +99,14 @@ export default function RegistrationScreen() {
           <View style={styles.container}>
             <CustomButton click={handleRegister} text={"Зареєстуватися"} />
             <Text style={styles.informText}>
-              Вже є акаунт? <Text style={styles.actionText}>Увійти</Text>
+              Вже є акаунт?{" "}
+              <Text
+                style={styles.actionText}
+                onPress={() => navigate("LoginScreen")}
+                activeOpacity={0.5}
+              >
+                Увійти
+              </Text>
             </Text>
           </View>
         </View>

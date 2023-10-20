@@ -7,3 +7,9 @@ export const colors = {
   darkBlue: "#1B4371",
   textColor: "#212121",
 };
+
+export const FontFamily = {
+  robotoRegular: "Roboto-Regular",
+  robotoMedium: "Roboto-Medium",
+  robotoBold: "Roboto-Bold",
+};

@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import {
   View,
@@ -13,6 +14,8 @@ import AuthLayout from "../components/AuthLayout";
 import { styles } from "../styles";
 
 export default function LoginScreen() {
+  const { navigate } = useNavigation();
+
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   return (
     <AuthLayout>
@@ -48,7 +51,13 @@ export default function LoginScreen() {
           <CustomButton text={"Увійти"} />
           <Text style={styles.informText}>
             Немає аккаунту?{" "}
-            <Text style={styles.actionText}>Зареєструватися</Text>
+            <Text
+              style={styles.actionText}
+              onPress={() => navigate("RegistrationScreen")}
+              activeOpacity={0.5}
+            >
+              Зареєструватися
+            </Text>
           </Text>
         </View>
       </View>
