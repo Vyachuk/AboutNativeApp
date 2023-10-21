@@ -6,6 +6,7 @@ export const colors = {
   darkGray: "#E8E8E8",
   darkBlue: "#1B4371",
   textColor: "#212121",
+  transparentWhite: "rgba(255, 255, 255, 0.30)",
 };
 
 export const FontFamily = {
