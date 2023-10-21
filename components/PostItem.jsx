@@ -16,7 +16,9 @@ export const PostItem = ({ post }) => {
   };
 
   const handleLocation = () => {
-    navigate("Map");
+    navigate("Map", {
+      locationCoords: { latitude: 49.842957, longitude: 24.031111 },
+    });
   };
 
   return (
