@@ -12,7 +12,7 @@ export const PostItem = ({ post }) => {
   const { navigate } = useNavigation();
 
   const handleCommentsClick = () => {
-    navigate("Comments");
+    navigate("Comments", { id, image });
   };
 
   const handleLocation = () => {
