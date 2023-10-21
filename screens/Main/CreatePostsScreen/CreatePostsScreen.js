@@ -10,8 +10,10 @@ import {
   View,
 } from "react-native";
 import { Camera, CameraType } from "expo-camera";
+import * as Location from "expo-location";
 import * as MediaLibrary from "expo-media-library";
 import { colors, FontFamily } from "../../../constants/globalThemeConstants";
+import { useNavigation } from "@react-navigation/native";
 
 const CreatePostsScreen = () => {
   const [photoUri, setPhotoUri] = useState(null);
@@ -19,16 +21,41 @@ const CreatePostsScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
+  const [locationCoords, setLocationCoords] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+
+  const { navigate } = useNavigation();
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
+      const location = await Location.requestForegroundPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
 
       setHasPermission(status === "granted");
     })();
   }, []);
+
+  useEffect(() => {
+    if (photoUri) {
+      (async () => {
+        const location = await Location.getCurrentPositionAsync({});
+        const coords = {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        };
+        setLocationCoords(coords);
+
+        const [address] = await Location.reverseGeocodeAsync(coords);
+
+        if (!address) return;
+
+        const fullLocation = `${address.city}, ${address.region}, ${address.country}`;
+        setLocation(fullLocation);
+      })();
+    }
+  }, [photoUri]);
+
   const takePicture = async () => {
     if (photoUri) {
       setPhotoUri(null);
@@ -38,6 +65,26 @@ const CreatePostsScreen = () => {
     const photo = await camera.takePictureAsync();
     await MediaLibrary.createAssetAsync(photo.uri);
     setPhotoUri(photo.uri);
+  };
+  const handleReset = () => {
+    setPhotoUri(null);
+    setTitle("");
+    setLocation("");
+  };
+  const handlePost = async () => {
+    navigate("Entry");
+    handleReset();
+  };
+
+  const handleDelete = () => {
+    handleReset();
+    navigate("Entry");
+  };
+
+  const handleToggleCamera = () => {
+    setType((prev) =>
+      prev === CameraType.back ? CameraType.front : CameraType.back
+    );
   };
 
   if (hasPermission === null) {
@@ -122,6 +169,7 @@ const CreatePostsScreen = () => {
           }}
           activeOpacity={0.5}
           disabled={isNotDisabled ? false : true}
+          onPress={handlePost}
         >
           <Text
             style={{
@@ -132,7 +180,11 @@ const CreatePostsScreen = () => {
             Опубліковати
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.trashBtn} activeOpacity={0.5}>
+        <TouchableOpacity
+          style={styles.trashBtn}
+          onPress={handleDelete}
+          activeOpacity={0.5}
+        >
           <Feather name="trash-2" size={24} color={colors.gray} />
         </TouchableOpacity>
       </View>

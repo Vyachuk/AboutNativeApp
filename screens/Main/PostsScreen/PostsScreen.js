@@ -12,7 +12,7 @@ const PostsStack = createStackNavigator();
 const PostsScreen = () => {
   return (
     <PostsStack.Navigator
-      initialRouteName="PostsDefault"
+      initialRouteName="Entry"
       screenOptions={{ headerTitleAlign: "center" }}
     >
       <PostsStack.Screen
