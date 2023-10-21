@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Image } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { PostItem } from "../../../../components/PostItem";
 import { FontFamily } from "../../../../constants/globalThemeConstants";
-const POSTS = [
+export const POSTS = [
   {
     image: require("../../../../assets/mock/forest.webp"),
     title: "Forest",
