@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, View, StyleSheet, Text, FlatList } from "react-native";
 import AuthLayout from "../../Auth/components/AuthLayout";
 import { styles } from "../../Auth/styles";
@@ -8,6 +8,9 @@ import { POSTS } from "../PostsScreen/EntryPostsScreen/EntryPostsScreen";
 import { PostItem } from "../../../components/PostItem";
 
 const ProfileScreen = () => {
+  useEffect(() => {
+    console.log("hello");
+  }, []);
   return (
     <AuthLayout>
       <View style={styles.wrap}>

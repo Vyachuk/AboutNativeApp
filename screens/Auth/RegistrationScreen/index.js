@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import {
   View,
@@ -10,31 +10,37 @@ import {
   Pressable,
   TouchableWithoutFeedback,
   Keyboard,
+  TouchableOpacity,
 } from "react-native";
 import CustomButton from "../../../components/CustomButton";
 import AuthLayout from "../components/AuthLayout";
 import { styles } from "../styles";
 import { colors } from "../../../constants/globalThemeConstants";
 import { useNavigation } from "@react-navigation/native";
+import useAuthLogicHook from "../useAuthHook";
+import usePickImage from "../../../hooks/usePickImage";
 
 export default function RegistrationScreen() {
   const { navigate } = useNavigation();
 
   const [isPasswordShow, setIsPasswordShow] = useState(false);
-  const [login, setLogin] = useState("");
-  const [mail, setMail] = useState("");
-  const [pass, setPass] = useState("");
+  const { image, pickGalleryImage } = usePickImage();
 
-  const handleRegister = () => {
-    console.log(
-      "Login: " + login + ", ",
-      "Email: " + mail + ", ",
-      "Password: " + pass
-    );
-    setLogin("");
-    setMail("");
-    setPass("");
-  };
+  const [profile, setProfile] = useState({ name: "", photo: "" });
+  const [creds, setCreds] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { handleSubmit } = useAuthLogicHook({
+    creds,
+    profile,
+    screen: "RegistrationScreen",
+  });
+
+  useEffect(() => {
+    image && setProfile({ ...profile, avatar: image });
+  }, [image]);
   return (
     <AuthLayout>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -48,7 +54,10 @@ export default function RegistrationScreen() {
                 source={require("../../../assets/woman.png")}
                 style={styles.imageForm}
               />
-              <View style={styles.iconImageWrap}>
+              <TouchableOpacity
+                style={styles.iconImageWrap}
+                onPress={pickGalleryImage}
+              >
                 <AntDesign
                   name="closecircleo"
                   size={25}
@@ -61,29 +70,29 @@ export default function RegistrationScreen() {
                 size={25}
                 backgroundColor={colors.white}
               /> */}
-              </View>
+              </TouchableOpacity>
             </View>
             <View style={styles.formWrap}>
               <Text style={styles.title}>Реєстрація</Text>
               <TextInput
                 style={styles.styledInput}
                 placeholder="Логін"
-                value={login}
-                onChangeText={(text) => setLogin(text)}
+                value={profile.name}
+                onChangeText={(name) => setProfile({ ...profile, name })}
               />
               <TextInput
                 style={styles.styledInput}
                 placeholder="Адреса електронної пошти"
-                value={mail}
-                onChangeText={(text) => setMail(text)}
+                value={creds.email}
+                onChangeText={(email) => setCreds({ ...creds, email })}
               />
               <View>
                 <TextInput
                   secureTextEntry={!isPasswordShow}
                   style={styles.styledInput}
                   placeholder="Пароль"
-                  value={pass}
-                  onChangeText={(text) => setPass(text)}
+                  value={creds.password}
+                  onChangeText={(password) => setCreds({ ...creds, password })}
                 />
                 <Pressable
                   style={styles.showBtn}
@@ -97,7 +106,7 @@ export default function RegistrationScreen() {
             </View>
           </KeyboardAvoidingView>
           <View style={styles.container}>
-            <CustomButton click={handleRegister} text={"Зареєстуватися"} />
+            <CustomButton click={handleSubmit} text={"Зареєстуватися"} />
             <Text style={styles.informText}>
               Вже є акаунт?{" "}
               <Text
