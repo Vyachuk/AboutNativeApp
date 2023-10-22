@@ -1,16 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, View, StyleSheet, Text, FlatList } from "react-native";
 import AuthLayout from "../../Auth/components/AuthLayout";
 import { styles } from "../../Auth/styles";
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../../constants/globalThemeConstants";
-import { POSTS } from "../PostsScreen/EntryPostsScreen/EntryPostsScreen";
 import { PostItem } from "../../../components/PostItem";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/Auth/authSelectors";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../../../firebase/config";
 
 const ProfileScreen = () => {
   const { user } = useSelector(selectUser);
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      onSnapshot(collection(db, "posts"), (doc) => {
+        const allPosts = doc.docs
+          .map((post) => ({ ...post.data(), id: post.id }))
+          .sort((a, b) => b.date - a.date);
+        setPosts(allPosts);
+      });
+    })();
+  }, []);
 
   return (
     <AuthLayout>
@@ -36,7 +49,7 @@ const ProfileScreen = () => {
           <Text style={styles.title}>{user.name}</Text>
 
           <FlatList
-            data={POSTS}
+            data={posts}
             renderItem={({ item }) => <PostItem post={item} />}
             keyExtractor={(item) => item.id}
           />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
@@ -6,32 +6,24 @@ import { PostItem } from "../../../../components/PostItem";
 import { FontFamily } from "../../../../constants/globalThemeConstants";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../redux/Auth/authSelectors";
-export const POSTS = [
-  {
-    image: require("../../../../assets/mock/forest.webp"),
-    title: "Forest",
-    location: "Lviv",
-    comments: "2",
-    id: 0,
-  },
-  {
-    image: require("../../../../assets/mock/apache.jpeg"),
-    title: "Terapak",
-    location: "Kyiv",
-    comments: "44",
-    id: 1,
-  },
-  {
-    image: require("../../../../assets/mock/tundra.jpeg"),
-    title: "Tundra",
-    location: "Sahara",
-    comments: "22",
-    id: 2,
-  },
-];
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../../../../firebase/config";
 
 const EntryPostsScreen = () => {
   const { user } = useSelector(selectUser);
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      onSnapshot(collection(db, "posts"), (doc) => {
+        const allPosts = doc.docs
+          .map((post) => ({ ...post.data(), id: post.id }))
+          .sort((a, b) => b.date - a.date);
+        setPosts(allPosts);
+      });
+    })();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.ownerContainer}>
@@ -43,7 +35,7 @@ const EntryPostsScreen = () => {
       </View>
       <View style={styles.listWrapper}>
         <FlatList
-          data={POSTS}
+          data={posts}
           renderItem={({ item }) => <PostItem post={item} />}
           keyExtractor={(item) => item.id}
         />
