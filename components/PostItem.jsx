@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { colors, FontFamily } from "../constants/globalThemeConstants";
 
 export const PostItem = ({ post }) => {
-  const { id, image, location, title, comments } = post;
+  const { id, image, location, title, comments, locationCoords } = post;
 
   const { navigate } = useNavigation();
 
@@ -17,7 +17,7 @@ export const PostItem = ({ post }) => {
 
   const handleLocation = () => {
     navigate("Map", {
-      locationCoords: { latitude: 49.842957, longitude: 24.031111 },
+      locationCoords,
     });
   };
 

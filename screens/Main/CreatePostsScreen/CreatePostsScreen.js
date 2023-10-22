@@ -91,7 +91,6 @@ const CreatePostsScreen = () => {
       userId: user.id,
       date: Date.now(),
     };
-    console.log(data);
     await addDoc(collection(db, "posts"), data);
 
     navigate("Entry");
