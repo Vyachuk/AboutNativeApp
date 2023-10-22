@@ -6,20 +6,18 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../../constants/globalThemeConstants";
 import { POSTS } from "../PostsScreen/EntryPostsScreen/EntryPostsScreen";
 import { PostItem } from "../../../components/PostItem";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../redux/Auth/authSelectors";
 
 const ProfileScreen = () => {
-  useEffect(() => {
-    console.log("hello");
-  }, []);
+  const { user } = useSelector(selectUser);
+
   return (
     <AuthLayout>
       <View style={styles.wrap}>
         <View style={[styles.keyboardAvoidingView, css.container]}>
           <View style={styles.imageFormWrap}>
-            <Image
-              source={require("../../../assets/woman.png")}
-              style={styles.imageForm}
-            />
+            <Image source={{ uri: user.avatar }} style={styles.imageForm} />
             <View style={styles.iconImageWrap}>
               <AntDesign
                 name="closecircleo"
@@ -35,7 +33,7 @@ const ProfileScreen = () => {
               /> */}
             </View>
           </View>
-          <Text style={styles.title}>Natali Romanova</Text>
+          <Text style={styles.title}>{user.name}</Text>
 
           <FlatList
             data={POSTS}

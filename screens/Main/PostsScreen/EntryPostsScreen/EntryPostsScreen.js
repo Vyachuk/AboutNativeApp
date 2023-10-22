@@ -1,8 +1,11 @@
 import React from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+
 import { PostItem } from "../../../../components/PostItem";
 import { FontFamily } from "../../../../constants/globalThemeConstants";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../../redux/Auth/authSelectors";
 export const POSTS = [
   {
     image: require("../../../../assets/mock/forest.webp"),
@@ -28,16 +31,14 @@ export const POSTS = [
 ];
 
 const EntryPostsScreen = () => {
+  const { user } = useSelector(selectUser);
   return (
     <View style={styles.container}>
       <View style={styles.ownerContainer}>
-        <Image
-          source={require("../../../../assets/woman.png")}
-          style={styles.image}
-        />
+        <Image source={{ uri: user.avatar }} style={styles.image} />
         <View style={styles.textWrapper}>
-          <Text style={styles.title}>Natali Romanova</Text>
-          <Text style={styles.mail}>email@example.com</Text>
+          <Text style={styles.title}>{user.name}</Text>
+          <Text style={styles.mail}>{user.email}</Text>
         </View>
       </View>
       <View style={styles.listWrapper}>

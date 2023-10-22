@@ -6,10 +6,18 @@ import CommentsScreen from "./CommentsScreen/CommentsScreen";
 import MapScreen from "./MapScreen/MapScreen";
 import { colors } from "../../../constants/globalThemeConstants";
 import { Feather } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { signOutThunk } from "../../../redux/Auth/authOperation";
 
 const PostsStack = createStackNavigator();
 
 const PostsScreen = () => {
+  const dispatch = useDispatch();
+  const handleSignOut = () => {
+    dispatch(signOutThunk())
+      .unwrap()
+      .catch((error) => Alert.alert("Помилка виходу з акаунту", error));
+  };
   return (
     <PostsStack.Navigator
       initialRouteName="Entry"
@@ -24,7 +32,7 @@ const PostsScreen = () => {
             <TouchableOpacity
               style={{ marginRight: 16 }}
               activeOpacity={0.5}
-              // onPress={handleSignOut}
+              onPress={handleSignOut}
             >
               <Feather name="log-out" size={24} color={colors.textColor} />
             </TouchableOpacity>

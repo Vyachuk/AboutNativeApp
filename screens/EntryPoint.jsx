@@ -29,7 +29,7 @@ export default function Entrypoint() {
         dispatch(refreshUser(data));
         setIsAuth(true);
       } else {
-        return;
+        setIsAuth(false);
       }
     });
   }, []);

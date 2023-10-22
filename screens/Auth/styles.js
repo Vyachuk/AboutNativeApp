@@ -19,6 +19,8 @@ export const styles = StyleSheet.create({
   imageForm: {
     width: 120,
     height: 120,
+    backgroundColor: colors.ligthGray,
+    borderRadius: 16,
   },
   title: {
     textAlign: "center",

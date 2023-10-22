@@ -14,6 +14,11 @@ import * as Location from "expo-location";
 import * as MediaLibrary from "expo-media-library";
 import { colors, FontFamily } from "../../../constants/globalThemeConstants";
 import { useNavigation } from "@react-navigation/native";
+import { selectUser } from "../../../redux/Auth/authSelectors";
+import { uploadImageToServer } from "../../../utils/uploadImageToServer";
+import { useSelector } from "react-redux";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../../firebase/config";
 
 const CreatePostsScreen = () => {
   const [photoUri, setPhotoUri] = useState(null);
@@ -25,6 +30,7 @@ const CreatePostsScreen = () => {
   const [type, setType] = useState(Camera.Constants.Type.back);
 
   const { navigate } = useNavigation();
+  const { user } = useSelector(selectUser);
 
   useEffect(() => {
     (async () => {
@@ -66,12 +72,28 @@ const CreatePostsScreen = () => {
     await MediaLibrary.createAssetAsync(photo.uri);
     setPhotoUri(photo.uri);
   };
+
   const handleReset = () => {
     setPhotoUri(null);
     setTitle("");
     setLocation("");
   };
   const handlePost = async () => {
+    const imageUrl = await uploadImageToServer({
+      imageUri: photoUri,
+      folder: "postsImage",
+    });
+    const data = {
+      imageUrl,
+      title,
+      location,
+      locationCoords,
+      userId: user.id,
+      date: Date.now(),
+    };
+    console.log(data);
+    await addDoc(collection(db, "posts"), data);
+
     navigate("Entry");
     handleReset();
   };

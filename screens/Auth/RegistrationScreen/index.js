@@ -39,7 +39,7 @@ export default function RegistrationScreen() {
   });
 
   useEffect(() => {
-    image && setProfile({ ...profile, avatar: image });
+    image && setProfile({ ...profile, photo: image });
   }, [image]);
   return (
     <AuthLayout>
@@ -50,26 +50,30 @@ export default function RegistrationScreen() {
             style={styles.keyboardAvoidingView}
           >
             <View style={styles.imageFormWrap}>
-              <Image
-                source={require("../../../assets/woman.png")}
-                style={styles.imageForm}
-              />
+              {profile.photo ? (
+                <Image source={{ uri: image }} style={styles.imageForm} />
+              ) : (
+                <View style={styles.imageForm}></View>
+              )}
               <TouchableOpacity
                 style={styles.iconImageWrap}
                 onPress={pickGalleryImage}
               >
-                <AntDesign
-                  name="closecircleo"
-                  size={25}
-                  color={colors.gray}
-                  backgroundColor={colors.white}
-                />
-                {/* <AntDesign
-                name="pluscircleo"
-                color={colors.orange}
-                size={25}
-                backgroundColor={colors.white}
-              /> */}
+                {profile.photo ? (
+                  <AntDesign
+                    name="closecircleo"
+                    size={25}
+                    color={colors.gray}
+                    backgroundColor={colors.white}
+                  />
+                ) : (
+                  <AntDesign
+                    name="pluscircleo"
+                    color={colors.orange}
+                    size={25}
+                    backgroundColor={colors.white}
+                  />
+                )}
               </TouchableOpacity>
             </View>
             <View style={styles.formWrap}>

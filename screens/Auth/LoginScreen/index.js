@@ -12,9 +12,18 @@ import {
 import CustomButton from "../../../components/CustomButton";
 import AuthLayout from "../components/AuthLayout";
 import { styles } from "../styles";
+import useAuthLogicHook from "../useAuthHook";
 
 export default function LoginScreen() {
   const { navigate } = useNavigation();
+  const [creds, setCreds] = useState({
+    email: "",
+    password: "",
+  });
+  const { handleSubmit } = useAuthLogicHook({
+    creds,
+    screen: "LoginScreen",
+  });
 
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   return (
@@ -29,12 +38,16 @@ export default function LoginScreen() {
             <TextInput
               style={styles.styledInput}
               placeholder="Адреса електронної пошти"
+              value={creds.email}
+              onChangeText={(email) => setCreds({ ...creds, email })}
             />
             <View>
               <TextInput
                 secureTextEntry={!isPasswordShow}
                 style={styles.styledInput}
                 placeholder="Пароль"
+                value={creds.password}
+                onChangeText={(password) => setCreds({ ...creds, password })}
               />
               <Pressable
                 style={styles.showBtn}
@@ -48,7 +61,7 @@ export default function LoginScreen() {
           </View>
         </KeyboardAvoidingView>
         <View style={{ ...styles.container, paddingBottom: 144 }}>
-          <CustomButton text={"Увійти"} />
+          <CustomButton text={"Увійти"} click={handleSubmit} />
           <Text style={styles.informText}>
             Немає аккаунту?{" "}
             <Text
