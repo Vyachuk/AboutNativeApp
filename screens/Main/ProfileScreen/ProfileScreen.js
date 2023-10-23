@@ -1,20 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { Image, View, StyleSheet, Text, FlatList } from "react-native";
+import {
+  Image,
+  View,
+  StyleSheet,
+  Text,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import AuthLayout from "../../Auth/components/AuthLayout";
 import { styles } from "../../Auth/styles";
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../../constants/globalThemeConstants";
 import { PostItem } from "../../../components/PostItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../../redux/Auth/authSelectors";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase/config";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Feather } from "@expo/vector-icons";
+import { signOutThunk } from "../../../redux/Auth/authOperation";
 
 const ProfileScreen = () => {
   const { user } = useSelector(selectUser);
   const [posts, setPosts] = useState([]);
+  const dispatch = useDispatch();
 
+  const handleSignOut = () => {
+    dispatch(signOutThunk())
+      .unwrap()
+      .catch((error) => Alert.alert("Помилка виходу з акаунту", error));
+  };
   useEffect(() => {
     (async () => {
       onSnapshot(collection(db, "posts"), (doc) => {
@@ -32,6 +46,13 @@ const ProfileScreen = () => {
     <AuthLayout>
       <View style={styles.wrap}>
         <View style={[styles.keyboardAvoidingView, css.container]}>
+          <TouchableOpacity
+            style={{ marginRight: 16, alignSelf: "flex-end" }}
+            activeOpacity={0.5}
+            onPress={handleSignOut}
+          >
+            <Feather name="log-out" size={24} color={colors.gray} />
+          </TouchableOpacity>
           <View style={styles.imageFormWrap}>
             <Image source={{ uri: user.avatar }} style={styles.imageForm} />
             <View style={styles.iconImageWrap}>
@@ -49,6 +70,7 @@ const ProfileScreen = () => {
               /> */}
             </View>
           </View>
+
           <Text style={styles.title}>{user.name}</Text>
 
           <FlatList
