@@ -18,6 +18,7 @@ const EntryPostsScreen = () => {
       onSnapshot(collection(db, "posts"), (doc) => {
         const allPosts = doc.docs
           .map((post) => ({ ...post.data(), id: post.id }))
+          .filter((post) => post.userId === user.id)
           .sort((a, b) => b.date - a.date);
         setPosts(allPosts);
       });

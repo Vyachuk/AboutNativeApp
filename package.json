@@ -15,6 +15,7 @@
     "@react-navigation/native-stack": "^6.9.15",
     "@react-navigation/stack": "^6.3.19",
     "@reduxjs/toolkit": "^1.9.7",
+    "date-fns": "^2.30.0",
     "expo": "~49.0.13",
     "expo-camera": "~13.4.4",
     "expo-font": "~11.4.0",

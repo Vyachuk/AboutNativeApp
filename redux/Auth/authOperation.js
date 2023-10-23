@@ -44,9 +44,7 @@ export const signInThunk = createAsyncThunk(
   "auth/signIn",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      console.log("email", email, "pass", password);
       const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log(response);
       const user = response.user;
 
       const data = {

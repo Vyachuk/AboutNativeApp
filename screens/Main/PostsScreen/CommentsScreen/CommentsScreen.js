@@ -14,26 +14,56 @@ import {
 } from "react-native";
 import { colors, FontFamily } from "../../../../constants/globalThemeConstants";
 import { AntDesign } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../../redux/Auth/authSelectors";
+import { db } from "../../../../firebase/config";
+import { addDoc, collection, doc, onSnapshot } from "firebase/firestore";
+import { CommentItem } from "../../../../components/CommentItem";
+import { useGetComments } from "../../../../hooks/useGetComments";
 
 const CommentsScreen = () => {
-  const [photoUrl, setPhotoUrl] = useState("");
+  const [post, setPost] = useState("");
   const [comment, setComment] = useState("");
+  const { user } = useSelector(selectUser);
   const route = useRoute();
   useEffect(() => {
     if (route.params) {
-      setPhotoUrl(route.params.image);
+      setPost(route.params);
     }
   }, [route.params]);
+
+  const handleCreateComment = async () => {
+    if (comment) {
+      const data = {
+        comment,
+        userAvatar: user.avatar,
+        date: Date.now(),
+        userId: user.id,
+      };
+      const docRef = doc(db, "posts", route.params.id);
+      await addDoc(collection(docRef, "comments"), data);
+      setComment("");
+    }
+  };
+
+  const [allComments, setAllComments] = useGetComments(post.id);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        {photoUrl && <Image style={styles.image} source={photoUrl} />}
-        {/* <FlatList
-          data={comment}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <CommentItem data={item} />}
-        /> */}
+        {post.imageUrl && (
+          <Image style={styles.image} source={{ uri: post.imageUrl }} />
+        )}
+        <View style={styles.allCommentsContainer}>
+          {allComments && (
+            <FlatList
+              data={allComments}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <CommentItem data={item} />}
+            />
+          )}
+        </View>
+
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
@@ -47,7 +77,7 @@ const CommentsScreen = () => {
             />
             <TouchableOpacity
               style={styles.sendBtn}
-              // onPress={handleSendComment}
+              onPress={handleCreateComment}
             >
               <AntDesign name="arrowup" size={24} color={colors.white} />
             </TouchableOpacity>
@@ -60,6 +90,7 @@ const CommentsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: "relative",
     paddingHorizontal: 16,
     paddingTop: 32,
     paddingBottom: 16,
@@ -71,6 +102,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 32,
     width: "100%",
+  },
+  allCommentsContainer: {
+    overflow: "hidden",
+    flex: 1,
+    position: "relative",
   },
   inputContainer: {
     height: 50,

@@ -5,14 +5,27 @@ import { Feather, FontAwesome5, FontAwesome } from "@expo/vector-icons";
 
 import { useNavigation } from "@react-navigation/native";
 import { colors, FontFamily } from "../constants/globalThemeConstants";
+import { useGetComments } from "../hooks/useGetComments";
+import { useGetLikes } from "../hooks/useGetLikes";
+import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
+import { db } from "../firebase/config";
+import { useSelector } from "react-redux";
+import { selectUser } from "../redux/Auth/authSelectors";
 
 export const PostItem = ({ post }) => {
-  const { id, image, location, title, comments, locationCoords } = post;
-
+  const { id, imageUrl, location, title, comments, locationCoords } = post;
   const { navigate } = useNavigation();
+  const { user } = useSelector(selectUser);
+
+  const [allComments] = useGetComments(id);
+  const commentCount = allComments.length;
+  const [allLikes] = useGetLikes(id);
+  const likesNumber = allLikes.length;
+
+  const userLike = allLikes.find((like) => like.userId === user.id);
 
   const handleCommentsClick = () => {
-    navigate("Comments", { id, image });
+    navigate("Comments", { id, imageUrl });
   };
 
   const handleLocation = () => {
@@ -21,9 +34,23 @@ export const PostItem = ({ post }) => {
     });
   };
 
+  const toggleLike = async () => {
+    if (userLike) {
+      const docRef = doc(db, "posts", id, "likes", userLike.id);
+      await deleteDoc(docRef);
+    } else {
+      const docRef = doc(db, "posts", id);
+      await addDoc(collection(docRef, "likes"), {
+        userId: user.id,
+        userName: user.name,
+        userEmail: user.email,
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={image} />
+      <Image style={styles.image} source={{ uri: imageUrl }} />
       <Text style={styles.title}>{title}</Text>
       <View style={styles.descriptionContainer}>
         <View style={styles.btnContainer}>
@@ -32,7 +59,7 @@ export const PostItem = ({ post }) => {
             activeOpacity={0.5}
             onPress={handleCommentsClick}
           >
-            {comments ? (
+            {commentCount > 0 ? (
               <FontAwesome
                 name="comment"
                 size={24}
@@ -54,13 +81,17 @@ export const PostItem = ({ post }) => {
             <Text
               style={{
                 ...styles.commentsNumber,
-                color: comments ? colors.textColor : colors.gray,
+                color: commentCount ? colors.textColor : colors.gray,
               }}
             >
-              {comments}
+              {commentCount}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5} style={styles.commentsBtn}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.commentsBtn}
+            onPress={toggleLike}
+          >
             <Feather name="thumbs-up" size={24} color={colors.orange} />
             <Text
               style={{
@@ -68,7 +99,7 @@ export const PostItem = ({ post }) => {
                 color: colors.textColor,
               }}
             >
-              {20}
+              {likesNumber}
             </Text>
           </TouchableOpacity>
         </View>

@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/Auth/authSelectors";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase/config";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProfileScreen = () => {
   const { user } = useSelector(selectUser);
@@ -19,7 +20,9 @@ const ProfileScreen = () => {
       onSnapshot(collection(db, "posts"), (doc) => {
         const allPosts = doc.docs
           .map((post) => ({ ...post.data(), id: post.id }))
+          .filter((post) => post.userId === user.id)
           .sort((a, b) => b.date - a.date);
+
         setPosts(allPosts);
       });
     })();
@@ -52,6 +55,7 @@ const ProfileScreen = () => {
             data={posts}
             renderItem={({ item }) => <PostItem post={item} />}
             keyExtractor={(item) => item.id}
+            style={styles.list}
           />
         </View>
       </View>
@@ -63,6 +67,7 @@ const css = StyleSheet.create({
   container: {
     height: "80%",
     position: "relative",
+    paddingBottom: 70,
   },
 });
 
