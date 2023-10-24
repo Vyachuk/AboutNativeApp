@@ -16,6 +16,7 @@ export default function usePickImage() {
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
+      return result.assets[0].uri;
     }
   };
 

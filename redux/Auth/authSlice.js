@@ -1,5 +1,10 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
-import { signInThunk, signOutThunk, signUpThunk } from "./authOperation";
+import {
+  editAvatarThunk,
+  signInThunk,
+  signOutThunk,
+  signUpThunk,
+} from "./authOperation";
 
 const initialState = {
   user: {
@@ -30,7 +35,11 @@ const authSlice = createSlice({
         state.stateChanged = initialState.stateChanged;
       })
       .addMatcher(
-        isAnyOf(signUpThunk.fulfilled, signInThunk.fulfilled),
+        isAnyOf(
+          signUpThunk.fulfilled,
+          signInThunk.fulfilled,
+          editAvatarThunk.fulfilled
+        ),
         (state, { payload }) => {
           state.user = payload.user;
           state.stateChanged = true;

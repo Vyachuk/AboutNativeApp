@@ -17,9 +17,13 @@ import { selectUser } from "../../../redux/Auth/authSelectors";
 import { collection, onSnapshot } from "firebase/firestore";
 import { auth, db } from "../../../firebase/config";
 import { Feather } from "@expo/vector-icons";
-import { signOutThunk } from "../../../redux/Auth/authOperation";
+import {
+  editAvatarThunk,
+  signOutThunk,
+} from "../../../redux/Auth/authOperation";
 import usePickImage from "../../../hooks/usePickImage";
 import { updateProfile } from "firebase/auth";
+import { uploadImageToServer } from "../../../utils/uploadImageToServer";
 
 const ProfileScreen = () => {
   const { user } = useSelector(selectUser);
@@ -51,12 +55,13 @@ const ProfileScreen = () => {
   }, [image]);
 
   const handleToggleAvatar = async () => {
-    await pickGalleryImage();
-    const user = auth.currentUser;
+    const chooseNewPhoto = await pickGalleryImage();
 
-    updateProfile(user, {
-      photoURL: image,
+    const imageUrl = await uploadImageToServer({
+      imageUri: chooseNewPhoto,
+      folder: "avatars",
     });
+    dispatch(editAvatarThunk(imageUrl));
   };
   return (
     <AuthLayout>

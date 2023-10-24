@@ -13,7 +13,6 @@ export default function useAuthLogicHook({ creds, profile, screen }) {
         imageUri: profile.photo,
         folder: "avatars",
       });
-      console.log(imageUrl);
       dispatch(
         signUpThunk({
           name: profile.name,

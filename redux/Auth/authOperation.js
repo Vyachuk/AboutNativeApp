@@ -73,3 +73,28 @@ export const signOutThunk = createAsyncThunk(
     }
   }
 );
+
+export const editAvatarThunk = createAsyncThunk(
+  "auth/editAvatar",
+  async (photo, { rejectWithValue }) => {
+    try {
+      const user = auth.currentUser;
+      await updateProfile(user, {
+        photoURL: photo,
+      });
+
+      const data = {
+        user: {
+          name: user.displayName,
+          email: user.email,
+          id: user.uid,
+          avatar: user.photoURL,
+        },
+      };
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
