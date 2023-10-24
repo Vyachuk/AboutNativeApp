@@ -90,6 +90,9 @@ export const styles = StyleSheet.create({
     overflow: "hidden",
     position: "absolute",
     top: 80,
+    width: 25,
+    height: 25,
+
     right: -12.5,
   },
 });

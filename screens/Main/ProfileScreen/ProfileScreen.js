@@ -9,20 +9,18 @@ import {
 } from "react-native";
 import AuthLayout from "../../Auth/components/AuthLayout";
 import { styles } from "../../Auth/styles";
-import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../../constants/globalThemeConstants";
 import { PostItem } from "../../../components/PostItem";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../../redux/Auth/authSelectors";
 import { collection, onSnapshot } from "firebase/firestore";
-import { auth, db } from "../../../firebase/config";
-import { Feather } from "@expo/vector-icons";
+import { db } from "../../../firebase/config";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import {
   editAvatarThunk,
   signOutThunk,
 } from "../../../redux/Auth/authOperation";
 import usePickImage from "../../../hooks/usePickImage";
-import { updateProfile } from "firebase/auth";
 import { uploadImageToServer } from "../../../utils/uploadImageToServer";
 
 const ProfileScreen = () => {
@@ -81,17 +79,11 @@ const ProfileScreen = () => {
               onPress={handleToggleAvatar}
             >
               <AntDesign
-                name="closecircleo"
+                name="edit"
                 size={25}
                 color={colors.gray}
                 backgroundColor={colors.white}
               />
-              {/* <AntDesign
-                name="pluscircleo"
-                color={colors.orange}
-                size={25}
-                backgroundColor={colors.white}
-              /> */}
             </TouchableOpacity>
           </View>
 
