@@ -24,7 +24,6 @@ export default function RegistrationScreen() {
   const { navigate } = useNavigation();
 
   const [isPasswordShow, setIsPasswordShow] = useState(false);
-  const { image, pickGalleryImage } = usePickImage();
 
   const [profile, setProfile] = useState({ name: "", photo: "" });
   const [creds, setCreds] = useState({
@@ -38,6 +37,7 @@ export default function RegistrationScreen() {
     screen: "RegistrationScreen",
   });
 
+  const { image, pickGalleryImage } = usePickImage();
   useEffect(() => {
     image && setProfile({ ...profile, photo: image });
   }, [image]);

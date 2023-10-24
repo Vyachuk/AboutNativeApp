@@ -18,10 +18,12 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase/config";
 import { Feather } from "@expo/vector-icons";
 import { signOutThunk } from "../../../redux/Auth/authOperation";
+import usePickImage from "../../../hooks/usePickImage";
 
 const ProfileScreen = () => {
   const { user } = useSelector(selectUser);
   const [posts, setPosts] = useState([]);
+  const [profileAvatar, setProfileAvatar] = useState(user.avatar);
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
@@ -42,6 +44,14 @@ const ProfileScreen = () => {
     })();
   }, []);
 
+  const { image, pickGalleryImage } = usePickImage();
+  useEffect(() => {
+    image && setProfileAvatar(image);
+  }, [image]);
+
+  const handleToggleAvatar = async () => {
+    console.log("Change");
+  };
   return (
     <AuthLayout>
       <View style={styles.wrap}>
@@ -54,8 +64,11 @@ const ProfileScreen = () => {
             <Feather name="log-out" size={24} color={colors.gray} />
           </TouchableOpacity>
           <View style={styles.imageFormWrap}>
-            <Image source={{ uri: user.avatar }} style={styles.imageForm} />
-            <View style={styles.iconImageWrap}>
+            <Image source={{ uri: profileAvatar }} style={styles.imageForm} />
+            <TouchableOpacity
+              style={styles.iconImageWrap}
+              onPress={handleToggleAvatar}
+            >
               <AntDesign
                 name="closecircleo"
                 size={25}
@@ -68,7 +81,7 @@ const ProfileScreen = () => {
                 size={25}
                 backgroundColor={colors.white}
               /> */}
-            </View>
+            </TouchableOpacity>
           </View>
 
           <Text style={styles.title}>{user.name}</Text>
